@@ -47,6 +47,12 @@ class User
      */
     private $tasks;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\File(mimeTypes={"image/png", "image/jpeg"})
+     */
+    private $image;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -101,6 +107,18 @@ class User
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
 
         return $this;
     }

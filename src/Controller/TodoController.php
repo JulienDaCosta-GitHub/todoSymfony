@@ -8,6 +8,7 @@ use App\Form\TaskType;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -31,6 +32,13 @@ class TodoController extends AbstractController
 
             $user = $form->getData();
             $user->setCreatedAt(new \DateTime());
+
+            $image = $user->getImage();
+            $imageName = md5(uniqid()).'.'.$image->guessExtension();
+            $image->move($this->getParameter('upload_files') ,
+            $imageName);
+            $user ->setImage($imageName);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -52,12 +60,22 @@ class TodoController extends AbstractController
         ->getRepository(User::class)
         ->find($id);
 
+        $user->setImage(new File($this->getParameter('upload_files').'/'.$user->getImage()));
+        
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
             $user = $form->getData();
+
+            $image = $user->getImage();
+            $imageName = md5(uniqid()).'.'.$image->guessExtension();
+            $image->move($this->getParameter('upload_files') ,
+            $imageName);
+            $user ->setImage($imageName);
+
+
             $entityManager->persist($user);
             $entityManager->flush();
 
