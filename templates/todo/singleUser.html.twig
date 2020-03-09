@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{user.nom|capitalize}} {{user.prenom|capitalize}}</h5>
+                    <p class="card-text">{{user.email}}</p>
+                </div>
+            </div>
+            <div class="mt-5">
+                <ul>
+                    {% if user.tasks is empty %}
+                        <p>{{user.prenom | capitalize}} ne possède aucune tâche à effectuer</p>
+                    {% else %}
+                    {% for task in user.tasks %}
+                        <li>{{task.nom}} fini le {{task.deadline | date('d/m/Y H:i:s')}}
+                            {% if task.etat %}
+                                <p class="text-success">Tâche réalisée</p>
+                            {% else %}
+                            <p class="text-danger">Tâche à faire</p>
+                            {% endif %}
+                            <a href="{{path("validation", {id: task.id})}}"><button class="btn btn-success">Valider la tâche</button></a>
+                            <a href="{{path("remove", {id: task.id})}}"><button class="btn btn-danger">Supprimer</button></a>
+                        </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            {{form_start(formUser)}}
+            {{form_end(formUser)}}
+        </div>
+    </div>
+</div>
+{% endblock %}

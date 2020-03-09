@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+    {{form_start(taskForm)}}
+    {{form_rest(taskForm)}}
+    <select name="userId">
+        {% for user in users %}
+            <option value="{{user.id}}">{{ user.nom |capitalize}} {{ user.prenom |capitalize}}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Ajouter tâche</button>
+    {{form_end(taskForm)}}
+</div>
+{% endblock %}
