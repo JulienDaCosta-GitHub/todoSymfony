@@ -60,8 +60,10 @@ class TodoController extends AbstractController
         ->getRepository(User::class)
         ->find($id);
 
-        $user->setImage(new File($this->getParameter('upload_files').'/'.$user->getImage()));
-        
+        if (!is_null($user->getImage())) {
+            $user->setImage(new File($this->getParameter('upload_files').'/'.$user->getImage()));
+        }
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
